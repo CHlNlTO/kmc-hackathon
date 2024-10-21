@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->string('linkedin_url')->nullable();
+            $table->foreignId('job_role_id')->references('id')->on('job_roles')->nullable();
             $table->timestamps();
         });
     }
