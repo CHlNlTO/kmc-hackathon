@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Filament\Pages;
+namespace App\Filament\Widgets;
 
+use Filament\Widgets\Widget;
 use App\Filament\Resources\ResumeResource;
-use Filament\Pages\Page;
 use Filament\Actions\Action;
-use Filament\Support\Facades\FilamentView;
 
-class Resume extends Page
+class ResumeWidget extends Widget
 {
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
-    protected static string $view = 'filament.pages.resume';
+    protected static string $view = 'filament.widgets.create-resume';
 
     protected function getHeaderActions(): array
     {

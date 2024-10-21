@@ -7,6 +7,7 @@ use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Table;
 use App\Models\Talent;
+use App\Models\Skill;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Form;
@@ -48,7 +49,8 @@ class ResumeResource extends Resource
                                     ->url()
                                     ->maxLength(255),
                                 Forms\Components\Select::make('job_role_id')
-                                    ->relationship('jobRole', 'name'),
+                                    ->relationship('jobRole', 'name')
+                                    ->required(),
                             ])
                         ]),
                     Step::make('Skills and Experience')
@@ -56,14 +58,9 @@ class ResumeResource extends Resource
                             Grid::make(2)->schema([
                                 Forms\Components\Select::make('skills')
                                     ->multiple()
-                                    ->options([
-                                        'php' => 'PHP',
-                                        'javascript' => 'JavaScript',
-                                        'python' => 'Python',
-                                        'java' => 'Java',
-                                        'csharp' => 'C#',
-                                        'ruby' => 'Ruby',
-                                    ])
+                                    ->options(function () {
+                                        return Skill::all()->pluck('name', 'id');
+                                    })
                                     ->reactive()
                                     ->afterStateUpdated(function ($state, callable $set, callable $get) {
                                         $currentSkillDetails = $get('skill_details') ?? [];
@@ -72,10 +69,12 @@ class ResumeResource extends Resource
                                         $existingSkillMap = collect($currentSkillDetails)->keyBy('skill')->toArray();
 
                                         // Create or update skill details
-                                        $updatedSkillDetails = collect($state)->map(function ($skill) use ($existingSkillMap) {
+                                        $updatedSkillDetails = collect($state)->map(function ($skillId) use ($existingSkillMap) {
+                                            $skillName = Skill::find($skillId)->name;
                                             return [
-                                                'skill' => $skill,
-                                                'years_experience' => $existingSkillMap[$skill]['years_experience'] ?? null,
+                                                'skill' => $skillId,
+                                                'skill_name' => $skillName,
+                                                'years_experience' => $existingSkillMap[$skillId]['years_experience'] ?? null,
                                             ];
                                         })->toArray();
 
@@ -85,14 +84,9 @@ class ResumeResource extends Resource
                             Repeater::make('skill_details')
                                 ->schema([
                                     Forms\Components\Select::make('skill')
-                                        ->options([
-                                            'php' => 'PHP',
-                                            'javascript' => 'JavaScript',
-                                            'python' => 'Python',
-                                            'java' => 'Java',
-                                            'csharp' => 'C#',
-                                            'ruby' => 'Ruby',
-                                        ])
+                                        ->options(function () {
+                                            return Skill::all()->pluck('name', 'id');
+                                        })
                                         ->disabled(),
                                     Forms\Components\TextInput::make('years_experience')
                                         ->numeric()
