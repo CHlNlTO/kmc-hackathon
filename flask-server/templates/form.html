@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Project Form</title>
+</head>
+<body>
+
+<h2>Auto-Fill Project Form Using NLP</h2>
+
+<form action="/autofill" method="post">
+    <label for="description">Project Description:</label><br>
+    <textarea id="description" name="description" rows="4" cols="50" placeholder="Describe your project..."></textarea><br>
+    <input type="submit" value="Auto-Fill Form">
+</form>
+
+<hr>
+
+<h2>Project Details</h2>
+
+<form action="/submit" method="post">
+    <label for="project_name">Project Name:</label><br>
+    <input type="text" id="project_name" name="project_name" value="{{ data.get('project_name', '') }}"><br>
+
+    <label for="budget">Budget:</label><br>
+    <input type="text" id="budget" name="budget" value="{{ data.get('budget', '') }}"><br>
+
+    <label for="timeline">Timeline:</label><br>
+    <input type="text" id="timeline" name="timeline" value="{{ data.get('timeline', '') }}"><br>
+
+    <label for="skills">Skills Required:</label><br>
+    <input type="text" id="skills" name="skills" value="{{ data.get('skills', '') }}"><br><br>
+
+    <input type="submit" value="Submit Project">
+</form>
+
+</body>
+</html>
